@@ -1,0 +1,1230 @@
+Gen info: Physical Health- Concussions
+
+<h1><!DOCTYPE html>
+<html>
+  <head>
+    <title>Physical Health</title>
+  </head>
+  <body> 
+  <h1>General Information about Concussions</h1>
+  <h2>Mental Symptoms:</h2>
+  <p>
+    <ol>Difficulty thinking clearly</ol>
+    <ol>Trouble remembering new information</ol>
+    <ol>Difficulty Concentrating</ol>
+  </p>
+  
+  <h2>Physical Symptoms:</h2>
+  <p>
+    <ol>Headache</ol>
+    <ol>Fuzzy/blurry vision</ol>
+    <ol>Dizziness</ol>
+    <ol>Balance problems</ol>
+    <ol>Sensitivity to light and sound</ol>
+    <ol>Sleeping more or less than usual</ol>
+    <ol>Feeling tired</ol>
+  </p>
+  
+   <h2>Emotional Symptoms:</h2>
+  <p>
+    <ol>Sadness</ol>
+    <ol>Mood Swings</ol>
+ </p>
+    
+  <h1>How can I help diagnose a concussion?</h1>
+  <p>Use the AVPU Code!</p>
+ <ul>A- Alert: Hold a finger in front of the patient’s eyes and move it from left to right. Do they track your finger? Do they seem aware?</ul>
+ <ul>V is for voice. Does the victim hear and answer questions? Do you need to yell to get a response? Does she seem to understand what you are saying? Concussion patients may respond to spoken commands without being fully alert.</ul>
+ <ul>P -Pain Does the victim respond to pain or discomfort? Pinch the patient’s skin; does she open her eyes or respond physically?</ul>
+ <ul>U is for unresponsive. Does the victim fail to respond to voice, touch, or visual stimuli?</ul>
+ 
+   <h1>Immediate Care for a Concussion</h1>
+<p>Here are some tips!</p>
+<ul>Take a pain reliever such as Advil or Tylenol</ul>
+<ul>Minimize activities that require long periods of attention and focus. </ul>
+<ul>Close eyes and reduce technology usage</ul>
+  </body>
+</html> 
+
+
+
+
+
+
+
+
+
+Heat Effects Quiz
+
+Index.erb = Choose quiz for yourself or someone else
+
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Calma Koala Heat Effects</title>
+  </head>
+  
+  <body>
+    <h1>Calma Koala</h1>
+    <h2>Heat Effects Quiz</h2>
+    <p>It might be hot outside, but that certainly doesn't stop us from doing things outside! This quiz is designed to help you learn about heat stroke and heat exhaustion and determine if you or a friend have either. If you're feeling a little unwell or want to learn about heat effects, take the quiz!</p>
+    
+    <form action="/whofor" method="post">
+      
+      <h3>Are you taking this for yourself or someone else?</h3>
+      <input type="radio" name="person" value="20"><h4>Myself</h4>
+      <input type="radio" name="person" value="5"><h4>Someone Else</h4>
+      
+      <button type="submit" class="new">Submit</button>
+      
+    </form>
+  </body>
+  
+</html>
+<style>
+  body {
+    background-color: #E5F2FF
+  }
+  .new {
+    background-color: white;
+    color: #DDA0DD;
+    padding: 15px  32px;
+    font-size:24px;
+    font-family: fantasy;
+    border: 5px solid #DDA0DD;
+  }
+  h1 {
+    text-align: center;
+    color: #DDA0DD;
+    font-family: fantasy;
+    font-size: 60px;
+  }
+  h2 { 
+    font-family: american typewriter;
+    color: #DAA520;
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  h4 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+</style>
+
+
+Controller folder
+require './config/environment'
+require './app/models/sample_model'
+
+class ApplicationController < Sinatra::Base
+  configure do
+    set :public_folder, 'public'
+    set :views, 'app/views'
+  end
+
+  get '/' do
+    return erb :index
+  end
+  
+  post '/whofor' do
+    answers = params.values 
+    @total = 0 
+    answers.each do |answer|
+      @total += answer.to_i 
+    end
+    puts @total
+    
+    @combo = healtheffects(@total)
+    if @combo == "onyou"
+      erb :onyou
+    elsif @combo == "onsome"
+      erb :onsome
+    end
+  end 
+    
+  post '/yourresults' do
+    answers = params.values 
+    @total = 0 
+    answers.each do |answer|
+      @total += answer.to_i 
+    end
+    puts @total
+    
+    @combo = onyou(@total)
+    if @combo == "YHealthy_Results"
+      erb :YHealthy_Results
+    elsif @combo == "YHeat_Exhaustion"
+      erb :YHeat_Exhaustion
+    elsif @combo == "YHeat_Stroke"
+      erb :YHeat_Stroke
+    end
+  end
+  
+  post '/theirresults' do
+    answers = params.values 
+    @total = 0 
+    answers.each do |answer|
+      @total += answer.to_i 
+    end
+    puts @total
+    
+    @combo = onsome(@total)
+    if @combo == "SHealthy_Results"
+      erb :SHealthy_Results
+    elsif @combo == "SHeat_Exhaustion"
+      erb :SHeat_Exhaustion
+    elsif @combo == "SHeat_Stroke"
+      erb :SHeat_Stroke
+    end
+  end
+  
+end
+
+Sample Model Folder
+
+def healtheffects(value)
+  if value == 20
+    return "onyou"
+  elsif value == 5
+    return "onsome"
+  end
+  
+end
+
+
+def onyou(value)
+  
+  if value <= 40
+    return "YHealthy_Results"
+  elsif value >= 41 && value <= 80
+    return "YHeat_Exhaustion"
+  elsif value >= 81 
+    return "YHeat_Stroke"
+  end
+end   
+def onsome(value)
+  if value <= 40
+    return "SHealthy_Results"
+  elsif value >= 41 && value <= 80
+    return "SHeat_Exhaustion"
+  elsif value >= 81 
+    return "SHeat_Stroke"
+  end
+end
+
+You heat effects quiz
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Heat Effects On You</title>
+  </head>
+  
+  <body>
+    <h1>Heat Effects Quiz</h1>
+    
+    <form action="/yourresults" method="post">
+      
+      <h3>Are you tired, and/or do you have a headache?</h3>
+      <input type="radio" name="headache" value="10"><p>Yes</p>
+      <input type="radio" name="headache" value="1"><p>No</p>
+      
+      <h3>Are you thirsty?</h3>
+      <input type="radio" name="thirsty" value="10"><p>Yes</p>
+      <input type="radio" name="thirsty" value="1"><p>No</p>
+      
+      <h3>Do you have muscle weakness and cramps?</h3>
+      <input type="radio" name="muscle" value="10"><p>Yes</p>
+      <input type="radio" name="muscle" value="25"><p>No</p>
+      
+      <h3>Are you sweating a lot or a little?</h3>
+      <input type="radio" name="sweat" value="10"><p>A lot</p>
+      <input type="radio" name="sweat" value="25"><p>A little</p>
+      <input type="radio" name="sweat" value="1"><p>It's normal</p>
+      
+      <h3>Do you have shortness of breath?</h3>
+      <input type="radio" name="breath" value="25"><p>Yes</p>
+      <input type="radio" name="breath" value="1"><p>No</p>
+      
+      <h3>Is your heartbeat unusually slow or rapid?</h3>
+      <input type="radio" name="heart" value="10"><p>Slow</p>
+      <input type="radio" name="heart" value="25"><p>Rapid</p>
+      <input type="radio" name="heart" value="1"><p>It's normal</p>
+      
+      <h3>Are you confused or dizzy?</h3>
+      <input type="radio" name="dizzy" value="10"><p>Yes</p>
+      <input type="radio" name="dizzy" value="1"><p>No</p>
+      
+      <button type="submit" class="new">Submit</button>
+      
+    </form>
+  </body>
+  
+</html>
+<style>
+  body {
+    background-color: #E5F2FF
+  }
+  .new {
+    background-color: white;
+    color: #DDA0DD;
+    padding: 15px  32px;
+    font-size:24px;
+    font-family: fantasy;
+    border: 5px solid #DDA0DD;
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  h4 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+</style>
+
+Someone else heat effects quiz
+
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Heat Effects On Someone Else</title>
+  </head>
+  
+  <body>
+    <h1>Heat Effects Quiz</h1>
+    
+    <form action="/theirresults" method="post">
+      
+      <h3>Are they tired, and/or do they have a headache?</h3>
+      <input type="radio" name="headache" value="10"><p>Yes</p>
+      <input type="radio" name="headache" value="1"><p>No</p>
+
+      <h3>Are they thirsty?</h3>
+      <input type="radio" name="thirsty" value="10"><p>Yes</p>
+      <input type="radio" name="thirsty" value="1"><p>No</p>
+
+      <h3>Do they have muscle weakness and cramps?</h3>
+      <input type="radio" name="muscles" value="10"><p>Yes</p>
+      <input type="radio" name="muscles" value="25"><p>No</p>
+
+      <h3>Are they sweating a lot or a little?</h3>
+      <input type="radio" name="sweat" value="10"><p>A lot</p>
+      <input type="radio" name="sweat" value="25"><p>A little</p>
+      <input type="radio" name="sweat" value="1"><p>It's normal</p>
+
+      <h3>Do they have shortness of breath?</h3>
+      <input type="radio" name="breath" value="25"><p>Yes</p>
+      <input type="radio" name="breath" value="1"><p>No</p>
+
+      <h3>Is their heartbeat unusually slow or rapid?</h3>
+      <input type="radio" name="heart" value="10"><p>Slow</p>
+      <input type="radio" name="heart" value="25"><p>Rapid</p>
+      <input type="radio" name="heart" value="1"><p>It's normal</p>
+
+      <h3>Are they confused or dizzy?</h3>
+      <input type="radio" name="dizzy" value="10"><p>Yes</p>
+      <input type="radio" name="dizzy" value="1"><p>No</p>
+      
+      <button type="submit" class="new">Submit</button>
+      
+    </form>
+  </body>
+  
+</html>
+<style>
+  body {
+    background-color: #E5F2FF
+  }
+  .new {
+    background-color: white;
+    color: #DDA0DD;
+    padding: 15px  32px;
+    font-size:24px;
+    font-family: fantasy;
+    border: 5px solid #DDA0DD;
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  h4 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+</style>
+
+YHealthy Results
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>Healthy Results</title>
+  </head>
+  
+  <body>
+    <h1>Heat Effects Results</h1>
+    <h3>It looks like you're healthy!</h3>
+    <p>Based on the program's tabulatuons, it seems like you don't have any major negative health effects from the heat currently, however, if you're feeling unwell, get to some A/C and drink some water!</p>
+  </body>
+</html>
+
+<style>
+   body {
+    background-color: #E5F2FF
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+    font-size: 18px;
+  }
+</style>
+
+YHeat Exhaustion results
+
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>Heat Effects Results</title>
+  </head>
+  
+  <body>
+    <h1>Heat Effects Results</h1>
+    <h3>It looks like you may have heat exhaustion.</h3>
+    <p>Based on the program's tabulatuons, it seems like you might have heat exhaustion. Symptoms of heat exhaustion include: cool, moist skin with goose bumps when in the heat, heavy sweating, faintness and dizziness, fatigue, weak, rapid pulse, low blood pressure upon standing, muscle cramps, nausea, and headache. You should stop phyiscal activity, drink water or a sports drink, and get to a cool place. Be sure to contact your doctor if symptoms persist after an hour. If you become unable to drink or agitated, seek medical attention.</p>
+    <br>
+    <p>Click below to visit the Mayo Clinic for more info. As always, if they're unsure or they're feeling badly, talk to a medical professional.</p>
+    <button class="button"> <a href="https://www.mayoclinic.org/diseases-conditions/heat-exhaustion/symptoms-causes/syc-20373250">MAYO CLINIC</a> </button>
+    <br>
+    <br>
+    <br>
+    <p>We are not medical professionials, seek medical attention if you need it and listen to your doctor!</p>
+  </body>
+</html>
+<style>
+  .button {
+    background-color: white;
+    color: #DDA0DD;
+    padding: 15px  32px;
+    font-size:24px;
+    font-family: Serif;
+    border: 5px solid #DDA0DD;
+  }
+   body {
+    background-color: #E5F2FF
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+    font-size: 18px;
+  }
+</style>
+
+YHeat_Stroke
+
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>Heat Effects Results</title>
+  </head>
+  
+  <body>
+    <h1>Heat Effects Results</h1>
+    <h3>It looks like you may have heatstroke.</h3>
+    <p>Based on the program's tabulatuons, it seems like you might have heatstroke. Symptoms of heatstroke include: high body temperature, altered mental state or behavior, alteration in sweating, nausea and vomiting, flushed skin, rapid breathing, racing heart rate, and headache. You should seek immediate medical attention and stop phyiscal activity, drink water or a sports drink, and get to a cool place.</p>
+    <br>
+    <p>Click below to visit the Mayo Clinic. Seek medical attention!</p>
+    <button class="button"> <a href=" https://www.mayoclinic.org/diseases-conditions/heat-stroke/symptoms-causes/syc-20353581 for more information.">MAYO CLINIC</a> </button></p>
+    <br>
+    <br>
+    <br>
+    <p>We are not medical professionials, seek medical attention if you need it and listen to your doctor!</p>
+  </body>
+</html>
+<style>
+  .button {
+    background-color: white;
+    color: #DDA0DD;
+    padding: 15px  32px;
+    font-size:24px;
+    font-family: Serif;
+    border: 5px solid #DDA0DD;
+  }
+   body {
+    background-color: #E5F2FF
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+    font-size: 18px;
+  }
+</style>
+
+SHealthy_Results
+
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>Healthy Results</title>
+  </head>
+  
+  <body>
+    <h1>Heat Effects Results</h1>
+    <h3>It looks like they're healthy!</h3>
+    <p>Based on the program's tabulatuons, it seems like they don't have any major negative health effects from the heat currently, however, if they're feeling unwell, get to some A/C and drink some water!</p>
+  </body>
+</html>
+
+<style>
+  body {
+    background-color: #E5F2FF
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+    font-size: 18px;
+  }
+</style>
+
+
+SHeat_Exhaustion
+
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>Heat Effects Results</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  
+  <body>
+    <h1>Heat Effects Results</h1>
+    <h3>It looks like they may have heat exhaustion.</h3>
+    <p>Based on the program's tabulatuons, it seems like they might have heat exhaustion. Symptoms of heat exhaustion include: cool, moist skin with goose bumps when in the heat, heavy sweating, faintness and dizziness, fatigue, weak, rapid pulse, low blood pressure upon standing, muscle cramps, nausea, and headache. They should stop phyiscal activity, drink water or a sports drink, and get to a cool place. Be sure to contact their doctor if symptoms persist after an hour. If they become unable to drink or agitated, seek medical attention.</p>
+    <br>
+    <p>Click below to visit the Mayo Clinic for more info. As always, if they're unsure or they're feeling badly, talk to a medical professional.</p>
+    <button class="button"> <a href="https://www.mayoclinic.org/diseases-conditions/heat-exhaustion/symptoms-causes/syc-20373250">MAYO CLINIC</a> </button>
+    <br>
+    <br>
+    <br>
+    <p>We are not medical professionials, seek medical attention if they need it and listen to their doctor!</p>
+  </body>
+</html>
+<style>
+  .button {
+    background-color: white;
+    color: #DDA0DD;
+    padding: 15px  32px;
+    font-size:24px;
+    font-family: Serif;
+    border: 5px solid #DDA0DD;
+  }
+  body {
+    background-color: #E5F2FF
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+    font-size: 18px;
+  }
+</style>
+
+SHeat_Stroke
+
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>Heat Effects Results</title>
+  </head>
+  
+  <body>
+    <h1>Heat Effects Results</h1>
+    <h3>It looks like they may have heatstroke.</h3>
+    <p>Based on the program's tabulatuons, it seems like they might have heatstroke. Symptoms of heatstroke include: high body temperature, altered mental state or behavior, alteration in sweating, nausea and vomiting, flushed skin, rapid breathing, racing heart rate, and headache. They should seek immediate medical attention and stop phyiscal activity, drink water or a sports drink, and get to a cool place.</p>
+    <br>
+    <p>Click below to visit the Mayo Clinic. Seek medical attention!</p>
+    <button class="button"> <a href=" https://www.mayoclinic.org/diseases-conditions/heat-stroke/symptoms-causes/syc-20353581 for more information.">MAYO CLINIC</a> </button></p>
+    <br>
+    <br>
+    <br>
+    <p>We are not medical professionials, seek medical attention if they need it and listen to their doctor!</p>
+  </body>
+</html>
+<style>
+  .button {
+    background-color: white;
+    color: #DDA0DD;
+    padding: 15px  32px;
+    font-size:24px;
+    font-family: Serif;
+    border: 5px solid #DDA0DD;
+  }
+   body {
+    background-color: #E5F2FF
+  }
+  h1 {
+    color: #DDA0DD;
+    font-family: fantasy
+  }
+  h3 {
+    color: #DAA520;
+    font-family: american typewriter;
+  }
+  p {
+    color: #DAA520;
+    font-family: american typewriter;
+    font-size: 18px;
+  }
+</style>
+</style>
+
+
+
+
+
+HTML for Heimlich Maneuver Page
+<html> 
+  <head> 
+    <body>
+    <h1> Heimlich Maneuver</h1>
+    <h3> Basic Information</h3>
+    <p> The heimlich maneuver, or abdominal thrusts, raise the diaphragm and expel air from the lungs to get rid of the obstruction.
+If someone has their hands over their throat and seems to be struggling for breath, they are probably choking. </p>
+    <h3> Steps for Administering the Heimlich Maneuver</h3>
+    <ol> 
+      <il> Get the person to stand up</il>
+      <br>
+      <il> Position yourself behind the person.
+      </il>
+      <br>
+      <il> Lean the person forward and give five blows to their back with the heel of your hand. </il>
+      <br>
+      <il> Place your arms around their waist</il>
+      <br>
+      <il> Make a fist and place it just above the navel, thumb side in</il>
+      <br>
+      <il> Grab the fist with your other hand and push it inward and upward at the same time. Perform five of these abdominal thrusts
+ </il>
+      <br>
+      <il> Repeat until the object is expelled and the person can breathe or cough on their own</il>
+    </ol>
+
+    <h3> Heimlich Maneuver Tutorial</h3>
+    
+    <a
+             href= "https://www.youtube.com/watch?v=7CgtIgSyAiU">Heimlich Maneuver Tutorial </a>
+    </body>
+  </head>
+</html>
+
+HTML for Treating Burns Page
+<html>
+  <head>
+    <body>
+    <h3> For All Burns: </h3>
+    <h5> Cool the Burn </h5>
+    
+   *** NOTE: INFO FOR COOL THE BURN HAS A SLIGHTLY LIGHTER FONT< I DONT KNOW WHY, NEED TO EDIT.****   <p> Hold burned skin under cool (not cold) running water or immerse in cool water until pain subsides. Use compresses if running water isn’t available.</p>
+  <h5> Protect the Burn <h5>
+      <p> Cover with sterile, non-adhesive bandage or clean cloth. </p>
+      
+<h5> Treat the Pain <h5>
+  <p> Give over the counter pain relievers such as ibuprofen (Advil, Motrin), acetaminophen (Tylenol) or naproxen (Aleve) </p>
+  
+  <p> Note: Seek medical help if you see signs of infection (increased pain, redness, swelling, fever or oozing), the pain worsens, or if redness and pain last more than a few hours. </p>
+  
+  </body>
+  </head>
+    </html>
+
+HTML for Treating Sprain/Strain Injuries
+<html>
+  <head>
+    <body>
+      <h3> Use the RICE Method! </h3>
+      <ol>
+        <il> REST: rest as much as possible for the first 2 days. This can help prevent further bruising. </il>
+        <br> 
+        <br>
+        <il> ICE: apply an ice pack (covered with a light, absorbent towel to help prevent frostbite) for 10 minutes, then remove for 10 minutes. Repeat this as often as possible for the first 24 to 48 hours after your injury. If you don’t have an ice pack, a bag of frozen vegetables will work fine. </il>
+        <br>
+        <br>
+        <il> COMPRESSION: Wrap the affected area with an elastic medical bandage (like an ACE bandage). You want it to be snug but not too tight. If the skin below the wrap turns blue or feels cold, numb, or tingly, loosen the bandage. </il>
+        <br>
+        <br>
+        <il> ELEVATION: Raise the sore body part above the level of your heart. Doing so reduces pain, throbbing, and any internal bleeding that can lead to bruises. </il>
+      </ol>
+      
+    </body>
+  </head>
+</html>
+        
+
+HTML for Anxiety Attacks
+
+<html>
+  <head>
+    <body>
+      <h1> Anxiety Attacks </h1>
+      <h3> What are Anxiety Attacks?</h3>
+      <p> Anxiety attacks (also known as panic attacks) are intense periods of fear or feelings of doom developing over a very short time frame -up to 10 minutes- and associated with symptoms including sweating, trembling, shortness of breath, chest pain, nausea, dizziness, derealization, fear of dying, and numbness. </p>
+      <br>
+      <h3> Treatments </h3>
+      <p> There are a variety of treatments that can help you control your anxiety. It's all about finding the one that fits you the best! </p>
+      <ul>
+        <il> Counselling: talking to a therapist </il>
+        <br>
+        <il> Yoga/meditation </il>
+        <br>
+        <il> Exercise can help you calm your mind. Some examples include rolling your shoulders, going for a run/bike ride and talking a walk.
+</il>
+        <br>
+        <il> Getting back to a calmer state of mind by telling yourself to take a step back, and that you don’t have to do “this”. Be sure to ‘turn the volume down’ to give yourself peace of mind. </il>
+        
+        </body>
+      </head>
+    </html>
+        
+
+        HTML for Meditation 
+<html>
+  <head>
+   <body>
+<center>
+     <h1> Why is Meditation Important? </h1>
+    <p> Meditation helps relieve stress, making you more focused and more aware. It can also slow your aging process since it helps balance the body's system. Meditation can also greatly improve your mood and make you a generally happier person. </p>
+     <br>
+     <br>
+     <h3> How to Effectively Meditate </h3>
+     <ul>
+       <il> Sit or lie down in a comfortable spot. </il>
+       <br>
+       <il> Close your eyes and breathe normally. </il>
+       <br>
+       <il>Take care to feel how your body moves with each breath. Be aware of how your ribs, chest and stomach. </il>
+       <br>
+       <il> Clear your mind and try to stay focused on your breathing. </il>
+       
+     <h3>Breathing Exercises</h3>
+       <ul>
+         <il> Nadi Shodhana (Alternate Nostril Breathing): Release fatigue and tension with this calming breath. Take the thumb of the right finger and close off the right nostril. Inhale deeply and slowly through the left nostril. Use the right pinkie finger to close off the left nostril and exhale slowly through the right nostril. Continue this alternate breathing for a minimum of three minutes, maximum 31 minutes. Also a great option to do right before bed to calm a busy mind.</il>
+         <br>
+         <br>
+         <il> Sitali Pranayam (The Cooling Breath): The act of drawing the air across the tongue and into the mouth is said to have a cooling and calming effect on the nervous system. Roll the tongue into a “U”shape with the tip just outside the lips. Inhale slow and steady through the U shaped tongue filling the diaphragm. Exhale through the nose. Continue for three minutes. If this is too difficult, you can also try Sitkari Pranayama which has the same effect. Open the mouth slightly with your tongue just behind the teeth. Inhale slowly through the space between the upper and lower teeth, letting the air come in over your tongue as you lift your chin up toward the sky. At the end of the inhalation, close the mouth and exhale through the nostrils as you slowly lower your chin back to neutral. Repeat for 8 to 12 breaths. Both Sitali and Sitkari Pranayama are a particularly good way to wake up if you feel tired in the morning or even during an afternoon slump when you want to improve your focus. </il>
+         <br>
+         <br>
+         <il> One Minute Breath: This exercise soothes fear and is said to help cognition. 20 seconds to inhale, 20 seconds to hold breath, 20 seconds to exhale. To start, inhale slowly, filling the lower abdomen, stomach area, lungs and then finally, the chest. Hold the breath in for 20 seconds and then slowly exhale for 20 seconds. Work your way up to 20-20-20. Continue for a minimum of three minutes. </il>
+         <br>
+         <br>
+         <il> Breath of Fire: Rapid breath of fire is enlivening and cardiovascular; it improves the strength of the lungs, heats the body, and promotes quick energy. Begin in a comfortable seat and sit up tall. Keep the mouth closed through this breathing exercise. Relax the muscles of the stomach.Take a deep inhale through the nose and exhale through the nose. Begin to breathe rapidly through the nose and pump the naval point in and out with each breath. Maintain an equal emphasis on the exhalation and inhalation. The breath should be shallow so it can be quick. </il>
+        <br>
+         <br>
+         <il> Box Breath: This exercise is very similar to the One Minute Breath. Keep your mouth closed throughout this breathing exercise. Relax the muscles of the stomach. 4 seconds to inhale, 4 seconds to hold breath, 4 seconds to exhale, 4 seconds to hold breath. To start, inhale for 4 seconds, filling the lower abdomen, stomach area, lungs and then finally, the chest. Hold the breath in for 4 seconds, slowly exhale for 4 seconds, and then hold for 4 seconds. Continue in that order for a minimum of three minutes. </il>
+       </ul>
+
+       </body>
+     </head>
+       </html>
+       
+
+       
+HTML for How to deal with the death of a loved one
+<html>
+  <head>
+    <body>
+<center>
+      <h1> How to Deal with the Loss of a Loved One </h1>
+      <p> Losing a loved one is never an easy thing to deal with. Here are some tips to help.      <h3> Accepting Your Emotions </h3>
+      <p> Moving on from the loss of a loved one takes time. Don’t feel bad feel about your emotions, rather accept them. Accepting your feelings and understanding why you feel the way you do will help you get through emotional times. </p>
+      <br>
+      <h3> Self Care </h3>
+      <p> Take care of yourself and your family. Eating well, exercising and getting plenty of rest help us get through each day and move forward. </p>
+      <br>
+      <h3> Reach out and help others dealing with their loss </h3>
+      <p> Helping others can be therapeutic, and help you deal with your loss as well. Sharing stories of the deceased is also a good way to cope with the loss.</p>
+      <br>
+      <h3> Celebrate the lives of your loved ones </h3>
+      <p> This is one is more up to interpretation. Some ideas include donating to their favorite charity, or putting up a picture of them. Any way that honors your relationship with them is a good way to remember them. </p>
+    </body>
+  </head>
+</html>
+
+
+
+
+
+
+
+
+
+
+Meditation quiz that does not work yet
+App controller file
+
+require './config/environment'
+require './app/models/sample_model'
+
+class ApplicationController < Sinatra::Base
+  configure do
+    set :public_folder, 'public'
+    set :views, 'app/views'
+  end
+
+  get '/' do
+    return erb :index
+  end
+  
+  post '/results' do
+    answers = params.values 
+    @total = 0 
+    answers.each do |answer|
+      @total += answer.to_i 
+    end
+    puts @total 
+    
+    @combo = health_generator(@total)
+    if @combo == "OP1"
+      erb :OP1
+    elsif @combo == "OP2"
+      erb :OP2
+      elsif @combo == "OP3"
+      erb :OP3
+  end
+  
+end
+
+Sample model
+
+def health_generator(user_value)
+  
+  if user_value == 27
+    return "OP1"
+  elsif user_value == 22
+    return "OP2"
+  elsif user_value == 15
+    return "OP3"
+  end
+  
+end
+
+views/index
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Meditation Quiz</title>
+  </head>
+  
+  <body>
+    <h1>Meditation Quiz</h1>
+    
+    <form action="/results" method="post">
+      
+      <h2>Would you want to use an app or online video as a resource to help you meditate? </h2>
+      <input type="radio" name="gender" value="10">App 
+      <input type="radio" name="gender" value="100">Online Video
+
+      <h2>Do you want to hear a man or a woman?</h2>
+      <input type="radio" name="sport" value="2">Man
+      <input type="radio" name="sport" value="5">Woman
+      
+      <h2>Do you want guided or non-guided lessons?</h2>
+      <input type="radio" name="code" value="10">Guided
+      <input type="radio" name="code" value="1">Non-guided
+      
+    
+
+      <button type="submit" class="new">See your personalized meditation plan here!</button>
+      
+    </form>
+  </body>
+  
+</html>
+
+OP1 view
+<h1>Time to RELAX! Try using these apps: Meditation 1, Calm, and/or Oak!</h1>
+<img src="https://media.giphy.com/media/1034EEGrn91SrS/giphy.gif">
+	
+Op2 view
+<h1>YAY! Time to relax! Use Meditation 2, or Breathe to better enjoy your life fam.</h1>
+<img src="https://media.giphy.com/media/BVIUbTCsdoT2o/giphy.gif">
+
+Op3 view
+<h1>YAY! Time to relax! Use ENSO!!</h1>
+<img src="https://media.giphy.com/media/BVIUbTCsdoT2o/giphy.gif">
+
+
+
+
+HOMEPAGE HTML
+ </head>
+  <body>
+    <div id="grad1">   <img src= "https://pbs.twimg.com/media/DjmrELeWwAEaDQo.jpg:large"></div>
+  </body>
+</html>
+    
+
+CSS 
+#grad1 {
+   height: 400px;
+   background: blue;
+   background: linear-gradient(#a0d2ff,#d7f4ff,#e5f2ff);
+}
+
+
+LOSING YOUR LOVED ONE HTML
+<html>
+  <head>
+    <body>
+<center>
+    <div id="grad1">   
+      <h1> How to Deal with the Loss of a Loved One </h1>
+      <p> Losing a loved one is never an easy thing to deal with. Here are some tips to help.
+      <h3> Accepting Your Emotions </h3>
+      <p> Moving on from the loss of a loved one takes time. Don’t feel bad feel about your emotions, rather accept them. Accepting your feelings and understanding why you feel the way you do will help you get through emotional times. </p>
+      <br>
+      <h3> Self Care </h3>
+      <p> Take care of yourself and your family. Eating well, exercising and getting plenty of rest help us get through each day and move forward. </p>
+      <br>
+      <h3> Reach out and help others dealing with their loss </h3>
+      <p> Helping others can be therapeutic, and help you deal with your loss as well. Sharing stories of the deceased is also a good way to cope with the loss.</p>
+      <br>
+      <h3> Celebrate the lives of your loved ones </h3>
+      <p> This is one is more up to interpretation. Some ideas include donating to their favorite charity, or putting up a picture of them. Any way that honors your relationship with them is a good way to remember them. </p>
+      </div>
+      
+    </head>
+    </body>
+  
+</html>
+
+LOSING YOUR LOVED ONE CSS
+h1 {
+  font-family: fantasy
+
+}
+
+h1 {
+    color: #DDA0DD;
+Font-size: 60px;
+}
+
+h3 {
+  font-family: American Typewriter
+}
+
+h3{
+  color: #DAA520;
+}
+
+p{
+  font-family: American Typewriter
+}
+
+p{
+  color: #DAA520;
+}
+
+#grad1 {
+   height: 100%;
+/*    background: blue; */
+   background: linear-gradient(#a0d2ff,#d7f4ff,#e5f2ff);
+  background-repeat: repeat-x;
+}
+
+
+
+
+
+
+MEDITATION QUIZ UPDATED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Controller folder
+
+require './config/environment'
+require './app/models/sample_model'
+
+class ApplicationController < Sinatra::Base
+  configure do
+    set :public_folder, 'public'
+    set :views, 'app/views'
+  end
+
+  get '/' do
+    return erb :index
+  end
+  
+  post '/results' do
+    answers = params.values 
+    @total = 0 
+    answers.each do |answer|
+      @total += answer.to_i 
+    end
+    puts @total 
+    
+    @combo = health_generator(@total)
+    if @combo == "op1"
+       erb :OP1
+    elsif @combo == "op2"
+       erb :OP2
+    elsif @combo == "op3"
+       erb :OP3
+    elsif @combo == "op4"
+       erb :OP4
+    elsif @combo == "op5"
+       erb :OP5
+     elsif @combo == "op6"
+       erb :OP6
+       
+    end 
+  end
+end 
+ 
+
+Model folder
+
+def health_generator(user_value)
+  
+  if user_value == 22
+    return "op1"
+  elsif user_value == 25
+    return "op2"
+  elsif user_value <= 16
+    return "op3"
+  elsif user_value <= 108
+    return "op4"
+    elsif user_value == 112
+    return "op5"
+  elsif user_value == 115
+    return "op6"
+  end
+  
+end
+
+
+Views
+
+Index: 
+
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Meditation Quiz</title>
+  </head>
+  
+  <body>
+    <h1>Meditation Quiz</h1>
+    
+    <form action="/results" method="post">
+      
+      <h2>Would you want to use an app or online video as a resource to help you meditate? </h2>
+      <input type="radio" name="Appvid" value="10">App 
+      <input type="radio" name="Appvid" value="100">Online Video
+
+      <h2>Would you prefer a male or female instructor?</h2>
+      <input type="radio" name="Gender" value="2">Male
+      <input type="radio" name="Gender" value="5">Female
+      
+      <h2>Do you want guided or non-guided lessons?</h2>
+      <input type="radio" name="Lesson" value="10">Guided
+      <input type="radio" name="Lesson" value="1">Non-guided
+      
+    
+
+      <button type="submit" class="new">See your personalized meditation plan here!</button>
+      
+    </form>
+  </body>
+  
+</html>
+
+
+OP1:
+
+<!DOCTYPE html>
+<html>
+  <head> 
+<title>APPS</title>
+<body>
+<h1>Time to RELAX! Try using these apps: Headspace, Calm, and/or Oak!</h1>
+<img src="https://www.thecabinchiangmai.com/wp-content/uploads/2017/01/Headspace-App.jpg">
+</body>
+</head>
+</html>
+
+Op2:
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>APP</title>
+    <body> 
+<h1>YAY! Time to relax! Use Calm, Meditation, Oak, or Breethe to better enjoy your life fam.</h1>
+<img src="https://media.giphy.com/media/yoJC2COHSxjIqadyZW/giphy.gif">
+</body>
+  </head>
+
+</html>
+
+Op3: 
+
+<!DOCTYPE html>
+<html> 
+<head> 
+<title>APP</title>
+<body> 
+<h1>YAY! Time to relax! Use ENSO!!</h1>
+<img src="https://cdn.tricycle.org/wp-content/uploads/2016/10/Winter-2016_Meditation-App-Roundup_Enso-1.jpg">
+</body>
+</head>
+</html>
+
+
+Op4:
+
+<!DOCTYPE html>
+<html> 
+<head> 
+<title>APP</title>
+<body> 
+<h1>YAY! Time to relax! Use the following links to view videos to help aid in your relaxation!!</h1>
+<h2>Video 1!</h2>
+<button class="button"> <a href="https://www.youtube.com/watch?v=dEzbdLn2bJc">Video #1</a> </button>
+<h2>Video 2!</h2>
+<button class="button"> <a href="https://www.youtube.com/watch?v=dE_XVl7fwBQ">Video #2</a> </button>
+
+</body>
+</head>
+</html>
+
+Op5:
+
+<!DOCTYPE html>
+<html> 
+<head> 
+<title>APP</title>
+<body> 
+<h1>YAY! Time to relax! Use the following link to view a video to help aid in your relaxation!!</h1>
+<h2>Video 3!</h2>
+<button class="button"> <a href="https://www.youtube.com/watch?v=acIpsyTW6SI">Video #3</a> </button>
+</body>
+</head>
+</html>
+
+
+
+Op6:
+
+<!DOCTYPE html>
+<html> 
+<head> 
+<title>APP</title>
+<body> 
+<h1>YAY! Time to relax! Use the following link to view a video to help aid in your relaxation!!</h1>
+<h2>Video 4!</h2>
+<button class="button"> <a href="https://www.youtube.com/watch?v=i4ChVRRlxEM ">Video #4</a> </button>
+</body>
+</head>
+</html>
+
+
+
+
+CSS
+
+body {
+    background-color:;
+}
+
+h1 {
+    color: pink;
+}
+
+h2{
+  color: lightgray;
+}
+
+h3{
+  color: gray;
+}
+
+h1 {
+    font-family: Luminari, fantasy;
+}
+
+ol {
+  font-family: American Typewriter, serif
+}
+
+
+
+FONTS: https://www.w3.org/Style/Examples/007/fonts.en.html 
